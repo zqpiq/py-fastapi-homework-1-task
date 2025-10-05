@@ -19,7 +19,6 @@ class MovieDetailResponseSchema(BaseModel):
     revenue: float
     country: str
 
-
     @field_serializer("date")
     def serialize_date(self, v: date) -> str:
         return v.isoformat()
