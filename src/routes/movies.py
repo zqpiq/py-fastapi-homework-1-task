@@ -32,6 +32,10 @@ async def get_movies(
     prev_page = f"/theater/movies/?page={page - 1}&per_page={per_page}" if page > 1 else None
     next_page = f"/theater/movies/?page={page + 1}&per_page={per_page}" if page < total_pages else None
 
+    for m in movies:
+        if isinstance(m.revenue, float):
+            m.revenue = int(m.revenue)
+
     return {
         "movies": movies,
         "prev_page": prev_page,
