@@ -18,7 +18,12 @@ async def get_movies(
     total_items = await db.scalar(select(func.count()).select_from(MovieModel))
 
     offset = (page - 1) * per_page
-    result = await db.execute(select(MovieModel).offset(offset).limit(per_page))
+    result = await db.execute(
+        select(MovieModel)
+        .order_by(MovieModel.id)
+        .offset(offset)
+        .limit(per_page)
+    )
     movies = result.scalars().all()
     if not movies:
         raise HTTPException(status_code=404, detail="No movies found.")

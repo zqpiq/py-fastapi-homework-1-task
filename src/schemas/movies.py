@@ -1,7 +1,6 @@
 from typing import List, Optional
 from datetime import date
-
-from pydantic import BaseModel, field_serializer, validator
+from pydantic import BaseModel
 
 
 class MovieDetailResponseSchema(BaseModel):
@@ -19,16 +18,11 @@ class MovieDetailResponseSchema(BaseModel):
     revenue: int
     country: str
 
-    @field_serializer("date")
-    def serialize_date(self, v: date) -> str:
-        return v.isoformat()
-
-    @validator("revenue", pre=True)
-    def validate_revenue(cls, v):
-        return int(v)
-
     class Config:
         orm_mode = True
+        json_encoders = {
+            date: lambda v: v.isoformat(),
+        }
 
 
 class MovieListResponseSchema(BaseModel):
