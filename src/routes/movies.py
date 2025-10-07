@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import select, func
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database.session import get_db
@@ -15,7 +15,6 @@ async def get_movies(
     per_page: int = Query(10, ge=1, le=20, description="Number of movies per page"),
     db: AsyncSession = Depends(get_db)
 ):
-    total_movies = await db.execute(select(MovieModel))
     total_items = await db.scalar(select(func.count()).select_from(MovieModel))
 
     offset = (page - 1) * per_page
